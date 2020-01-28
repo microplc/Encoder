@@ -32,15 +32,14 @@ myEnc.write(newPosition);
 // 必须在 Encoder.h 被包含之前定义
 #define ENCODER_OPTIMIZE_INTERRUPTS
 #include <Encoder.h>
-这样编码器被直接定义为最小开销，缺点是与你其他代码或库调用 attachInterrupt() 产生冲突。
+这样编码器被直接定义为最小开销，缺点是与你其他代码或库调用 attachInterrupt() 产生冲突。最高速度和CPU开销测试的结果如下：同一个板子，一般最高100KHz，使用ENCODER_OPTIMIZE_INTERRUPTS选项优化后可以达到127KHz。
+           
+低性能的轮询模式：
+没有中断脚编码器也可以工作，信号只是在每次使用 read() 函数时进行检查。调用 read() 的频率越快，越容易获得准确的结果。此种轮询模式用于低速低精度的码盘或旋钮，或由人手拧动情况下是可以使用的。连接电机轴的高分辨率编码器一般必须使用中断。
 
-最高速度和CPU开销测试的结果如下：
-Board	Maximum    Interrupt Rate(approximate)	  Conditions
-Teensy 2.0	         100 kHz	                    Normal
-Teensy 2.0	         127 kHz	                    ENCODER_OPTIMIZE_INTERRUPTS
+注意：使用 Arduino Uno, Duemilanove or Mega 板，其 Serial.print() 可能会引发一些问题。 Arduino 1.0 由于提供了数据传送机制，工作会优于 Arduino 0023 甚至更早的版本。无论哪个版本，高波特率和减少发送数据量都很有帮助。
 
-
-http://www.pjrc.com/teensy/td_libs_Encoder.html
+http://www.pjrc.com/teensy/td_libs_Encoder.html          这个网站有很多可借鉴的内容。
 
 http://www.youtube.com/watch?v=2puhIong-cs
 
